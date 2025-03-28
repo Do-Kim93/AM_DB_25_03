@@ -1,13 +1,10 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JDBCConnTest {
+    static Connection conn = null;
     public static void main(String[] args) {
-        Connection conn = null;
-
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
@@ -27,6 +24,5 @@ public class JDBCConnTest {
                 e.printStackTrace();
             }
         }
-
     }
 }
