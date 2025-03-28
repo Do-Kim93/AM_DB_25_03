@@ -10,15 +10,23 @@ public class dao {
     static ResultSet rs = null;
 
 
-    static void add(String sql) {
+    static void add(String sql, String sss) {
         try {
+            int num = 0;
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
             System.out.println("연결 성공!");
             pstmt = conn.prepareStatement(sql);
             int result = pstmt.executeUpdate();
-            if (result == 1) System.out.println("글이 작성 되었습니다.");
+            pstmt = conn.prepareStatement(sql);
+            PreparedStatement stt = conn.prepareStatement(sss);
+            ResultSet rr = stt.executeQuery(sss);
+            while (rr.next()) {
+                int id = rr.getInt(1);
+                num = id;
+            }
+            if (result == 1) System.out.println(num+"번 글이 작성 되었습니다.");
             else System.out.println("insert fail");
 
         } catch (ClassNotFoundException e) {
@@ -46,6 +54,7 @@ public class dao {
     static void list(String sql) {
         List<Article> articles = new ArrayList<>();
         try {
+            int num = 0;
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
@@ -69,7 +78,7 @@ public class dao {
                     System.out.printf("   %d     /   %s     /   %s         /   %s         /   %s    \n", articles.get(i).getId(), articles.get(i).getTitle(), articles.get(i).getBody(), articles.get(i).getRegDate(), articles.get(i).getUpdateDate());
                 }
 
-            }else System.out.println("게시글 없음");
+            }
 
         } catch (ClassNotFoundException e) {
             System.out.println("드라이버 로딩 실패" + e);
@@ -99,16 +108,27 @@ public class dao {
             }
         }
     }
-    static void modify(String sql) {
+    static void modify(String sql, String sss) {
         try {
+            int num = 0;
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
             System.out.println("연결 성공!");
+            PreparedStatement stt = conn.prepareStatement(sss);
+            ResultSet rr = stt.executeQuery(sss);
+            while (rr.next()) {
+                int id = rr.getInt(1);
+                num = id;
+            }
+            System.out.println(num);
+            if (num == 0) {
+                System.out.println("개시글 없음");
+                return;
+            }
             pstmt = conn.prepareStatement(sql);
             int result = pstmt.executeUpdate();
             if (result == 1) System.out.println("글이 수정 되었습니다.");
-            else System.out.println("해당글 없음");
 
         } catch (ClassNotFoundException e) {
             System.out.println("드라이버 로딩 실패" + e);
@@ -132,17 +152,27 @@ public class dao {
         }
     }
 
-    public static void delete(String sql, int idnum) {
+    public static void delete(String sql, int idnum, String sss) {
+        int num = 0;
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
             System.out.println("연결 성공!");
+            PreparedStatement stt = conn.prepareStatement(sss);
+            ResultSet rr = stt.executeQuery(sss);
+            while (rr.next()) {
+                int id = rr.getInt(1);
+                num = id;
+            }
+            System.out.println(num);
+            if (num == 0) {
+                System.out.println("개시글 없음");
+                return;
+            }
             pstmt = conn.prepareStatement(sql);
             int result = pstmt.executeUpdate();
             if (result == 1) System.out.println(idnum+"번 글이 삭제 되었습니다.");
-            else System.out.println("글없음");
-
         } catch (ClassNotFoundException e) {
             System.out.println("드라이버 로딩 실패" + e);
         } catch (SQLException e) {

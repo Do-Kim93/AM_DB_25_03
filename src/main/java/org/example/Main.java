@@ -29,8 +29,9 @@ public class Main {
                 String body = sc.nextLine().trim();
                 String regDate = LocalDateTime.now().toString();
                 String updateDate = LocalDateTime.now().toString();
+                String sss = "select id from article order by id asc;";
                 String sql = " insert into article (regDate, updateDate, title, body) values ('" + regDate + "', '" + updateDate + "',  '" + title + "', '" + body + "')";
-                dao.add(sql);
+                dao.add(sql, sss);
             } else if (cmd.equals("article list")) {
                 System.out.println("==목록==");
                 String sql = "select * from article order by id desc;";
@@ -44,12 +45,14 @@ public class Main {
                 String body = sc.nextLine().trim();
                 String updateDate = LocalDateTime.now().toString();
                 String sql = "UPDATE article SET updateDate = '" + updateDate + "', title = '" + title + "', `body` = '" + body + "' WHERE id = " + idnum + ";";
-                dao.modify(sql);
+                String sss = "select count(*) from article  WHERE id = " + idnum + ";";
+                dao.modify(sql, sss);
 
             } else if (cmd.startsWith("article delete")) {
                 int idnum = Integer.parseInt(cmd.split(" ")[2]);
                 String sql = "delete from article where id = '" + idnum + "';";
-                dao.delete(sql, idnum);
+                String sss = "select count(*) from article  WHERE id = " + idnum + ";";
+                dao.delete(sql, idnum, sss);
             }
         }
         System.out.println("==프로그램 종료==");
