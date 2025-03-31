@@ -22,20 +22,13 @@ create table article(
 select *
 from article;
 
-select now();
-
-select '제목1';
-
-select concat('제목',' 1');
-
-select substring(RAND() * 1000 from 1 for 2);
-
 insert into article
 set regDate = now(),
     updateDate = now(),
     title = concat('제목',substring(RAND() * 1000 from 1 for 2)),
     `body` = concat('내용',substring(RAND() * 1000 from 1 for 2));
 
-select count (*) from article;
-select id from article;
-SELECT LAST_INSERT_ID();
+select count (*) from article where id = 19;
+# auto_increment 초기화 하는 코드
+SET @count=0;
+UPDATE article SET id =@count:=@count+1;

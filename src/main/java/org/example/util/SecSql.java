@@ -1,5 +1,5 @@
 package org.example.util;
-
+//쿼리 구성 클래스
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +26,7 @@ public class SecSql {
         return getFormat().startsWith("INSERT");
     }
 
-    public SecSql append(Object... args) {
+    public SecSql append(Object... args) {// 가변인자로 처리한 이유는 쿼리때문에 여러가지 경우수가 생기기때문
         if (args.length > 0) {
             String sqlBit = (String) args[0];
             sqlBuilder.append(sqlBit + " ");
