@@ -54,7 +54,6 @@ public class dao {
     static void list(String sql) {
         List<Article> articles = new ArrayList<>();
         try {
-            int num = 0;
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
@@ -73,7 +72,7 @@ public class dao {
             if (!articles.isEmpty()) {
                 System.out.println(articles.size());
 
-                System.out.println("   아이디   /   번호    /    제목        /     작성날짜                   /             수정날짜     ");
+                System.out.println("   번호   /   제목    /    내용        /     작성날짜                   /             수정날짜     ");
                 for (int i = 0; i < articles.size(); i++) {
                     System.out.printf("   %d     /   %s     /   %s         /   %s         /   %s    \n", articles.get(i).getId(), articles.get(i).getTitle(), articles.get(i).getBody(), articles.get(i).getRegDate(), articles.get(i).getUpdateDate());
                 }
@@ -123,7 +122,7 @@ public class dao {
             }
             System.out.println(num);
             if (num == 0) {
-                System.out.println("개시글 없음");
+                System.out.println("게시글 없음");
                 return;
             }
             pstmt = conn.prepareStatement(sql);
@@ -155,7 +154,7 @@ public class dao {
     public static void delete(String sql, int idnum, String sss) {
         int num = 0;
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
+            Class.forName("org.mariadb.jdbc.Driver");//해당 db드라이버를 동적으로 로드하는 역활
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
             conn = DriverManager.getConnection(url, "root", "");
             System.out.println("연결 성공!");
@@ -167,7 +166,7 @@ public class dao {
             }
             System.out.println(num);
             if (num == 0) {
-                System.out.println("개시글 없음");
+                System.out.println("게시글 없음");
                 return;
             }
             pstmt = conn.prepareStatement(sql);
