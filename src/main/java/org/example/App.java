@@ -3,7 +3,6 @@ package org.example;
 import org.example.util.DBUtil;
 import org.example.util.SecSql;
 
-import java.lang.reflect.Member;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -251,7 +250,7 @@ public class App {
                     sql.append("loginPw = ?,", pw);
                     sql.append("name = ?;", name);
                     int id1 = DBUtil.insert(conn, sql);
-                    System.out.println(id1 + "번째 회원 가입 입니다.");
+                    System.out.println(id1 + "번째 회원 입니다.");
                     break;
                 }else System.out.println("비번 다시 입력해");
             }
@@ -261,29 +260,29 @@ public class App {
             List<Member> members = new ArrayList<>();
 
             SecSql sqlall = new SecSql();
-            sqlall.append("SELECT count(*) FROM article");
+            sqlall.append("SELECT count(*) FROM member");
             int count = DBUtil.selectRowIntValue(conn, sqlall);
-            System.out.println(count + "개의 글이 있습니다.");
+            System.out.println(count + "명의 회원이 있습니다.");
 
             SecSql sql = new SecSql();
             sql.append("SELECT *");
-            sql.append("FROM article");
+            sql.append("FROM member");
             sql.append("ORDER BY id DESC");
 
-            List<Map<String, Object>> articleListMap = DBUtil.selectRows(conn, sql);
+            List<Map<String, Object>> memberListMap = DBUtil.selectRows(conn, sql);
 
-            for (Map<String, Object> articleMap : articleListMap) {
-                members.add(new Article(articleMap));
+            for (Map<String, Object> memberMap : memberListMap) {
+                members.add(new Member(memberMap));
             }
 
-            if (articles.size() == 0) {
-                System.out.println("게시글이 없습니다");
+            if (members.size() == 0) {
+                System.out.println("회원이 없습니다");
                 return 0;
             }
 
-            System.out.println("  번호  /   제목  ");
-            for (Article article : articles) {
-                System.out.printf("  %d     /   %s   \n", article.getId(), article.getTitle());
+            System.out.println("  회원번호  /   가입날짜  /  수정날짜  /   아이디  /   회원이름  ");
+            for (Member member : members) {
+                System.out.printf("  %d     /   %s    /   %s   /   %s    /    %s  \n", member.getId(), member.getRegDate().split(" ")[0], member.getUpdateDate().split(" ")[0], member.getLoginId(), member.getName());
             }
         }
 

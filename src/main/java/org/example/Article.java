@@ -9,16 +9,10 @@ public class Article {
     private String title;
     private String body;
 
-    public Article(int id, String regDate, String updateDate, String title, String body) {
+    public Article(int id, String regDate, String updateDate, String title, String body) {//JDBCConnTest 에서 쓰는용 본문에서는 안씀
         this.id = id;
         this.regDate = regDate;
         this.updateDate = updateDate;
-        this.title = title;
-        this.body = body;
-    }
-
-    public Article(int id, String title, String body) {
-        this.id = id;
         this.title = title;
         this.body = body;
     }

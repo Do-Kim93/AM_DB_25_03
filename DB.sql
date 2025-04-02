@@ -9,6 +9,7 @@ CREATE TABLE article(
                         title CHAR(100),
                         `body` TEXT NOT NULL
 );
+truncate table member;
 CREATE TABLE member(
                         id INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         regDate DATETIME NOT NULL,
@@ -17,6 +18,10 @@ CREATE TABLE member(
                         loginPw TEXT NOT NULL,
                         name CHAR(100) NOT NULL
 );
+# auto_increment 초기화 하는 코드
+SET @count=0;
+UPDATE article SET id =@count:=@count+1;
+
 insert INTO article SET regDate = NOW(),updateDate = NOW(),title = '제목', `body` = '내용';
 
 create table article(
@@ -37,9 +42,7 @@ set regDate = now(),
     `body` = concat('내용',substring(RAND() * 1000 from 1 for 2));
 
 select count (*) from article where id = 19;
-# auto_increment 초기화 하는 코드
-SET @count=0;
-UPDATE article SET id =@count:=@count+1;
+
 /*
 # 1. 손흥민의 주문 개수는? ???
 SELECT COUNT(*) FROM t_shopping WHERE userName = '손흥민';
