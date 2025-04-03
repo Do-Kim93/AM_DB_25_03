@@ -1,26 +1,19 @@
 package org.example.controller;
 
+import org.example.container.Container;
 import org.example.dto.Member;
 import org.example.service.MemberService;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
-import static org.example.App.loginMember;
-
 public class MemberController {
-    private Connection conn;
-    private Scanner sc;
 
     private MemberService memberService;
+    Scanner sc;
 
-    public MemberController(Scanner sc, Connection conn) {
-        this.sc = sc;
-        this.conn = conn;
-        this.memberService = new MemberService();
+    public MemberController() {
+        this.memberService = Container.memberService;
+        sc = Container.sc;
     }
 
     public void doJoin() {
@@ -37,7 +30,8 @@ public class MemberController {
                 System.out.println("아이디 똑바로 써");
                 continue;
             }
-            boolean isLoginIdDup = memberService.isLoginIdDup(loginId, conn);
+
+            boolean isLoginIdDup = memberService.isLoginIdDup(loginId);
 
             System.out.println(isLoginIdDup);
 
@@ -89,89 +83,85 @@ public class MemberController {
             break;
         }
 
-
-        int id = memberService.doJoin(conn, loginId, loginPw, name);
+        int id = memberService.doJoin(loginId, loginPw, name);
 
         System.out.println(id + "번 회원이 가입됨");
-
-
     }
 
-    public void showList() {
-        System.out.println("==회원 목록==");
-        List<Member> members = new ArrayList<>();
+    public void login() {
 
-        List<Map<String, Object>> memberListMap = memberService.showList(conn);
 
-        for (Map<String, Object> memberMap : memberListMap) {
-            members.add(new Member(memberMap));
-        }
+        String loginId = null;
+        String loginPw = null;
 
-        if (members.size() == 0) {
-            System.out.println("게시글이 없습니다");
-            return;
-        }
-
-        System.out.println("  번호  /   제목  ");
-        for (Member member : members) {
-            System.out.printf("  %d     /   %s    /   %s   /   %s    /    %s  \n", member.getId(), member.getRegDate().split(" ")[0], member.getUpdateDate().split(" ")[0], member.getLoginId(), member.getName());
-        }
-    }
-
-    public void doLogin() {
-        if (loginMember != null) {
-            System.out.println("이미 로그인 되어있슴");
-            return;
-        }
         System.out.println("==로그인==");
-        int i = 1;
-        while (i<=3) {
-            if (i == 3) {
-                System.out.println("마지막 기회다");
+        while (true) {
+            System.out.print("로그인 아이디 : ");
+            loginId = sc.nextLine().trim();
+
+            if (loginId.length() == 0 || loginId.contains(" ")) {
+                System.out.println("아이디 똑바로 써");
+                continue;
             }
-            System.out.print("아이디 입력 : ");
-            String loginId = sc.nextLine().trim();
-            System.out.print("비밀번호 입력 : ");
-            String loginPw = sc.nextLine().trim();
-//            boolean isLoginIdDup = memberService.isLoginIdDup(loginId, conn);
-            Map<String, Object> isLoginPwDup = memberService.isLoginPwDup(loginId, conn);
-            loginMember = new Member(isLoginPwDup);
-            if (loginId.equals(loginMember.getLoginId())) {
-                if (loginPw.equals(loginMember.getLoginPw())) {
-                    System.out.println(loginMember.getLoginId()+ "님 반갑습니다.");
-                    break;
-                }else {
-                    System.out.println("비밀번호가 다릅니다");
-                    i++;
-                }
-            }else {
-                System.out.println("아이디가 다릅니다");
-                i++;
+
+            boolean isLoginIdDup = memberService.isLoginIdDup(loginId);
+
+            if (isLoginIdDup == false) {
+                System.out.println(loginId + "은(는) 없어");
+                continue;
             }
+            break;
+
+        }
+
+        Member member = memberService.getMemberByLoginId(loginId);
+
+        int tryMaxCount = 3;
+        int tryCount = 0;
+
+        while (true) {
+            if (tryCount >= tryMaxCount) {
+                System.out.println("비번 다시 확인하고 시도해");
+                break;
+            }
+            System.out.print("비밀번호 : ");
+            loginPw = sc.nextLine().trim();
+
+            if (loginPw.length() == 0 || loginPw.contains(" ")) {
+                tryCount++;
+                System.out.printf("비번 똑바로 써(%d/3)\n", tryCount);
+                continue;
+            }
+
+            if (member.getLoginPw().equals(loginPw) == false) {
+                tryCount++;
+                System.out.printf("일치하지 않아(%d/3)\n", tryCount);
+                continue;
+            }
+
+
+            Container.session.loginedMember = member;
+            Container.session.loginedMemberId = member.getId();
+
+            System.out.println(member.getName() + "님 환영합니다");
+            break;
         }
     }
-    public void doLogout() {
-        if (loginMember != null) {
-            loginMember = null;
-            try {
-                System.out.println(loginMember.getLoginId()+"님 로그아웃 실패");
-            }catch (NullPointerException e) {
-                System.out.println("로그아웃 완료");
-            }
-        }else System.out.println("로그인부터해");
 
-    }
-
-    public void showDetail(String cmd) {
-        System.out.println("==상세보기==");
-
-        if (loginMember==null) {
-            System.out.println("로그인 해");
+    public void showProfile() {
+        if (Container.session.loginedMemberId == -1) {
+            System.out.println("로그인 상태 x");
             return;
-        }else {
-            System.out.println(loginMember);
+        } else {
+            System.out.println(Container.session.loginedMember);
         }
 
+    }
+
+    public void logout() {
+        System.out.println("==로그아웃==");
+        Container.session.loginedMember = null;
+        Container.session.loginedMemberId = -1;
 
     }
 }

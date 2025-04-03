@@ -1,35 +1,27 @@
 package org.example.dao;
 
+import org.example.container.Container;
+import org.example.dto.Member;
 import org.example.util.DBUtil;
 import org.example.util.SecSql;
 
-import java.sql.Connection;
-import java.util.List;
 import java.util.Map;
 
 public class MemberDao {
 
 
-
-    public boolean isLoginIdDup(String loginId, Connection conn) {
+    public boolean isLoginIdDup(String loginId) {
         SecSql sql = new SecSql();
 
         sql.append("SELECT COUNT(*) > 0");
         sql.append("FROM `member`");
         sql.append("WHERE loginId = ?;", loginId);
 
-        return DBUtil.selectRowBooleanValue(conn, sql);
+        return DBUtil.selectRowBooleanValue(Container.conn, sql);
     }
-    public Map<String, Object> isLoginPwDup(String loginId, Connection conn) {
-        SecSql sql = new SecSql();
 
-        sql.append("SELECT *");
-        sql.append("FROM `member`");
-        sql.append("WHERE loginId = ?;", loginId);
+    public int doJoin(String loginId, String loginPw, String name) {
 
-        return DBUtil.selectRow(conn, sql);
-    }
-    public int doJoin(Connection conn, String loginId, String loginPw, String name) {
         SecSql sql = new SecSql();
 
         sql.append("INSERT INTO `member`");
@@ -39,16 +31,23 @@ public class MemberDao {
         sql.append("loginPw = ?,", loginPw);
         sql.append("`name` = ?;", name);
 
-        return DBUtil.insert(conn, sql);
+        return DBUtil.insert(Container.conn, sql);
     }
-    public List<Map<String, Object>> showList(Connection conn) {
+
+    public Member getMemberByLoginId(String loginId) {
+
         SecSql sql = new SecSql();
 
-        sql.append("SELECT * FROM `member`");
-        sql.append("ORDER BY id DESC;");
+        sql.append("SELECT *");
+        sql.append("FROM `member`");
+        sql.append("WHERE loginId = ?;", loginId);
 
-        return DBUtil.selectRows(conn, sql);
+        Map<String, Object> memberMap = DBUtil.selectRow(Container.conn, sql);
+
+        if (memberMap.isEmpty()) {
+            return null;
+        }
+
+        return new Member(memberMap);
     }
-
-
 }

@@ -1,26 +1,22 @@
 package org.example.controller;
 
+import org.example.container.Container;
 import org.example.dto.Article;
 import org.example.service.ArticleService;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ArticleController {
 
-    private Connection conn;
+    private ArticleService articleService;
     private Scanner sc;
 
-    private ArticleService articleService;
-
-    public ArticleController(Scanner sc, Connection conn) {
-        this.sc = sc;
-        this.conn = conn;
-        this.articleService = new ArticleService(conn);
+    public ArticleController() {
+        this.articleService = Container.articleService;
+        this.sc = Container.sc;
     }
-
 
     public void doWrite() {
         System.out.println("==글쓰기==");
