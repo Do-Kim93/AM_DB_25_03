@@ -6,23 +6,26 @@ public class Article {
     private int id;
     private String regDate;
     private String updateDate;
+    private int memberId;
     private String title;
     private String body;
-    private String loginId;
-    private int loginIdNum;
 
-    public Article(int id, String regDate, String updateDate, String title, String body, String loginId, int loginIdNum) {
-        this.id = id;
-        this.regDate = regDate;
-        this.updateDate = updateDate;
-        this.title = title;
-        this.body = body;
-        this.loginIdNum = loginIdNum;
-        this.loginId = loginId;
+    private String name;
+
+
+    public String getName() {
+        return name;
     }
 
-    public Article(int id, String title, String body) {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Article(String regDate, int id, String updateDate, int memberId, String title, String body) {
+        this.regDate = regDate;
         this.id = id;
+        this.updateDate = updateDate;
+        this.memberId = memberId;
         this.title = title;
         this.body = body;
     }
@@ -31,19 +34,32 @@ public class Article {
         this.id = (int) articleMap.get("id");
         this.regDate = (String) articleMap.get("regDate");
         this.updateDate = (String) articleMap.get("updateDate");
+        this.memberId = (int) articleMap.get("memberId");
         this.title = (String) articleMap.get("title");
         this.body = (String) articleMap.get("body");
-        this.loginIdNum = (int) articleMap.get("loginIdNum");
-        this.loginId = (String) articleMap.get("loginId");
+
+        this.name = (String) articleMap.get("name");
+
     }
 
     @Override
     public String toString() {
         return "Article{" +
                 "id=" + id +
+                ", regDate='" + regDate + '\'' +
+                ", updateDate='" + updateDate + '\'' +
+                ", memberId=" + memberId +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 '}';
+    }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
     public String getRegDate() {
@@ -86,21 +102,4 @@ public class Article {
     public void setBody(String body) {
         this.body = body;
     }
-
-    public String getLoginId() {
-        return loginId;
-    }
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
-
-    public int getLoginIdNum() {
-        return loginIdNum;
-    }
-
-    public void setLoginIdNum(int loginIdNum) {
-        this.loginIdNum = loginIdNum;
-    }
-
-
 }
