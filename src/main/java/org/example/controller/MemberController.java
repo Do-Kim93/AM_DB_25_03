@@ -93,7 +93,10 @@ public class MemberController {
 
         String loginId = null;
         String loginPw = null;
-
+        if (Container.session.loginedMember != null){
+            System.out.println("이미 로그인 되어있음");
+            return;
+        }
         System.out.println("==로그인==");
         while (true) {
             System.out.print("로그인 아이디 : ");
@@ -115,6 +118,7 @@ public class MemberController {
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
+
 
         int tryMaxCount = 3;
         int tryCount = 0;
@@ -159,6 +163,10 @@ public class MemberController {
     }
 
     public void logout() {
+        if (Container.session.loginedMember == null) {
+            System.out.println("로그인부터해");
+            return;
+        }
         System.out.println("==로그아웃==");
         Container.session.loginedMember = null;
         Container.session.loginedMemberId = -1;

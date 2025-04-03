@@ -82,7 +82,7 @@ public class App {
             memberController.doJoin();
         } else if (cmd.equals("article write")) {
             articleController.doWrite();
-        } else if (cmd.equals("article list")) {
+        } else if (cmd.contains("article list")) {
             articleController.showList();
         } else if (cmd.startsWith("article modify")) {
             articleController.doModify(cmd);

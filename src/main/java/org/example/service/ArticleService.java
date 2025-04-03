@@ -16,14 +16,18 @@ public class ArticleService {
         this.articleDao = Container.articleDao;
     }
 
-    public int doWrite(String title, String body) {
-        return articleDao.doWrite(title, body);
+    public int doWrite(String title, String body, int id) {
+        return articleDao.doWrite(title, body, id);
 
     }
-
     public List<Article> getArticles() {
 
         return articleDao.getArticles();
+    }
+
+    public List<Article> getArticles(int paging) {
+
+        return articleDao.getArticles(paging);
     }
 
     public Map<String, Object> getArticleById(int id) {

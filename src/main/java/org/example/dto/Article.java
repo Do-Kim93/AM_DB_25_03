@@ -8,13 +8,17 @@ public class Article {
     private String updateDate;
     private String title;
     private String body;
+    private String loginId;
+    private int loginIdNum;
 
-    public Article(int id, String regDate, String updateDate, String title, String body) {
+    public Article(int id, String regDate, String updateDate, String title, String body, String loginId, int loginIdNum) {
         this.id = id;
         this.regDate = regDate;
         this.updateDate = updateDate;
         this.title = title;
         this.body = body;
+        this.loginIdNum = loginIdNum;
+        this.loginId = loginId;
     }
 
     public Article(int id, String title, String body) {
@@ -29,6 +33,8 @@ public class Article {
         this.updateDate = (String) articleMap.get("updateDate");
         this.title = (String) articleMap.get("title");
         this.body = (String) articleMap.get("body");
+        this.loginIdNum = (int) articleMap.get("loginIdNum");
+        this.loginId = (String) articleMap.get("loginId");
     }
 
     @Override
@@ -80,4 +86,21 @@ public class Article {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public String getLoginId() {
+        return loginId;
+    }
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public int getLoginIdNum() {
+        return loginIdNum;
+    }
+
+    public void setLoginIdNum(int loginIdNum) {
+        this.loginIdNum = loginIdNum;
+    }
+
+
 }
