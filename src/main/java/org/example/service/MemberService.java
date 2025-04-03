@@ -15,11 +15,7 @@ public class MemberService {
 
     public boolean isLoginIdDup(String loginId, Connection conn) {
         return memberDao.isLoginIdDup(loginId, conn);
-
-
     }
-
-
     public int doJoin(Connection conn, String loginId, String loginPw, String name) {
         return memberDao.doJoin(conn,loginId,loginPw,name);
     }
@@ -28,7 +24,7 @@ public class MemberService {
         return memberDao.showList(conn);
     }
 
-    public boolean isLoginPwDup(String loginPw, Connection conn) {
-        return memberDao.isLoginPwDup(loginPw, conn);
+    public Map<String, Object> isLoginPwDup(String loginId, Connection conn) {
+        return memberDao.isLoginPwDup(loginId, conn);
     }
 }

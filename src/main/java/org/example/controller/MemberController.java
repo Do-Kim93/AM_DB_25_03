@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class MemberController {
     private Connection conn;
     private Scanner sc;
+    private Member loginMember = null;
 
     private MemberService memberService;
 
@@ -117,24 +118,45 @@ public class MemberController {
     }
 
     public void doLogin() {
+        if (loginMember != null) {
+            System.out.println("이미 로그인 되어있슴");
+        }
         System.out.println("==로그인==");
-        while (true) {
+        int i = 1;
+        while (i<=3) {
+            if (i == 3) {
+                System.out.println("마지막 기회다");
+            }
             System.out.print("아이디 입력 : ");
             String loginId = sc.nextLine().trim();
             System.out.print("비밀번호 입력 : ");
             String loginPw = sc.nextLine().trim();
-            boolean isLoginIdDup = memberService.isLoginIdDup(loginId, conn);
-            boolean isLoginPwDup = memberService.isLoginPwDup(loginPw, conn);
-            if (isLoginIdDup) {
-                if (isLoginPwDup) {
-                    System.out.println(loginId+"님 반갑습니다.");
+//            boolean isLoginIdDup = memberService.isLoginIdDup(loginId, conn);
+            Map<String, Object> isLoginPwDup = memberService.isLoginPwDup(loginId, conn);
+            loginMember = new Member(isLoginPwDup);
+            if (loginId.equals(loginMember.getLoginId())) {
+                if (loginPw.equals(loginMember.getLoginPw())) {
+                    System.out.println(loginMember.getLoginId()+ "님 반갑습니다.");
                     break;
                 }else {
                     System.out.println("비밀번호가 다릅니다");
+                    i++;
                 }
             }else {
                 System.out.println("아이디가 다릅니다");
+                i++;
             }
         }
+    }
+    public void doLogout() {
+        if (loginMember != null) {
+            loginMember = null;
+            try {
+                System.out.println(loginMember.getLoginId()+"님 로그아웃 실패");
+            }catch (NullPointerException e) {
+                System.out.println("로그아웃 완료");
+            }
+        }else System.out.println("로그인부터해");
+
     }
 }

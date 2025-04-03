@@ -61,6 +61,8 @@ public class App {
             memberController.showList();
         } else if (cmd.equals("member login")) {
             memberController.doLogin();
+        } else if (cmd.equals("member logout")) {
+            memberController.doLogout();
         } else if (cmd.equals("article write")) {
             articleController.doWrite();
         } else if (cmd.equals("article list")) {
@@ -71,7 +73,7 @@ public class App {
             articleController.showDetail();
         } else if (cmd.startsWith("article delete")) {
             articleController.doDelete();
-        }else System.out.println("사용할수 없는 명렁어 입니다.");
+        } else System.out.println("사용할수 없는 명렁어 입니다.");
         return 0;
     }
 }

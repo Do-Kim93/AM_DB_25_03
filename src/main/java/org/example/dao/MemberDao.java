@@ -20,14 +20,14 @@ public class MemberDao {
 
         return DBUtil.selectRowBooleanValue(conn, sql);
     }
-    public boolean isLoginPwDup(String loginPw, Connection conn) {
+    public Map<String, Object> isLoginPwDup(String loginId, Connection conn) {
         SecSql sql = new SecSql();
 
-        sql.append("SELECT COUNT(*) > 0");
+        sql.append("SELECT *");
         sql.append("FROM `member`");
-        sql.append("WHERE loginPw = ?;", loginPw);
+        sql.append("WHERE loginId = ?;", loginId);
 
-        return DBUtil.selectRowBooleanValue(conn, sql);
+        return DBUtil.selectRow(conn, sql);
     }
     public int doJoin(Connection conn, String loginId, String loginPw, String name) {
         SecSql sql = new SecSql();
