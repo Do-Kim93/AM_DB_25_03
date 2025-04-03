@@ -4,6 +4,8 @@ import org.example.util.DBUtil;
 import org.example.util.SecSql;
 
 import java.sql.Connection;
+import java.util.List;
+import java.util.Map;
 
 public class MemberDao {
 
@@ -18,7 +20,15 @@ public class MemberDao {
 
         return DBUtil.selectRowBooleanValue(conn, sql);
     }
+    public boolean isLoginPwDup(String loginPw, Connection conn) {
+        SecSql sql = new SecSql();
 
+        sql.append("SELECT COUNT(*) > 0");
+        sql.append("FROM `member`");
+        sql.append("WHERE loginPw = ?;", loginPw);
+
+        return DBUtil.selectRowBooleanValue(conn, sql);
+    }
     public int doJoin(Connection conn, String loginId, String loginPw, String name) {
         SecSql sql = new SecSql();
 
@@ -31,4 +41,14 @@ public class MemberDao {
 
         return DBUtil.insert(conn, sql);
     }
+    public List<Map<String, Object>> showList(Connection conn) {
+        SecSql sql = new SecSql();
+
+        sql.append("SELECT * FROM `member`");
+        sql.append("ORDER BY id DESC;");
+
+        return DBUtil.selectRows(conn, sql);
+    }
+
+
 }

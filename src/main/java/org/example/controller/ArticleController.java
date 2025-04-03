@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.Article;
+import org.example.dto.Article;
 import org.example.service.ArticleService;
 
 import java.sql.Connection;
@@ -61,34 +61,27 @@ public class ArticleController {
 
     public void doModify() {
         int id = 0;
-
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {
             System.out.println("번호는 정수로 입력해");
             return;
         }
-
         Map<String, Object> articleMap = articleService.foundId(conn, id);
-
         if (articleMap.isEmpty()) {
             System.out.println(id + "번 글은 없음");
             return;
         }
-
         System.out.println("==수정==");
         System.out.print("새 제목 : ");
         String title = sc.nextLine().trim();
         System.out.print("새 내용 : ");
         String body = sc.nextLine().trim();
         articleService.doModify(conn, id, title, body);
-
         System.out.println(id + "번 글이 수정되었습니다.");
     }
-
     public void showDetail() {
         int id = 0;
-
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {
@@ -107,10 +100,8 @@ public class ArticleController {
         System.out.println("제목 : " + article.getTitle());
         System.out.println("내용 : " + article.getBody());
     }
-
     public void doDelete() {
         int id = 0;
-
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {

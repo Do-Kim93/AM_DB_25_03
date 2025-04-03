@@ -1,8 +1,12 @@
 package org.example.controller;
 
+import org.example.dto.Member;
 import org.example.service.MemberService;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MemberController {
@@ -89,5 +93,48 @@ public class MemberController {
         System.out.println(id + "번 회원이 가입됨");
 
 
+    }
+
+    public void showList() {
+        System.out.println("==회원 목록==");
+        List<Member> members = new ArrayList<>();
+
+        List<Map<String, Object>> memberListMap = memberService.showList(conn);
+
+        for (Map<String, Object> memberMap : memberListMap) {
+            members.add(new Member(memberMap));
+        }
+
+        if (members.size() == 0) {
+            System.out.println("게시글이 없습니다");
+            return;
+        }
+
+        System.out.println("  번호  /   제목  ");
+        for (Member member : members) {
+            System.out.printf("  %d     /   %s    /   %s   /   %s    /    %s  \n", member.getId(), member.getRegDate().split(" ")[0], member.getUpdateDate().split(" ")[0], member.getLoginId(), member.getName());
+        }
+    }
+
+    public void doLogin() {
+        System.out.println("==로그인==");
+        while (true) {
+            System.out.print("아이디 입력 : ");
+            String loginId = sc.nextLine().trim();
+            System.out.print("비밀번호 입력 : ");
+            String loginPw = sc.nextLine().trim();
+            boolean isLoginIdDup = memberService.isLoginIdDup(loginId, conn);
+            boolean isLoginPwDup = memberService.isLoginPwDup(loginPw, conn);
+            if (isLoginIdDup) {
+                if (isLoginPwDup) {
+                    System.out.println(loginId+"님 반갑습니다.");
+                    break;
+                }else {
+                    System.out.println("비밀번호가 다릅니다");
+                }
+            }else {
+                System.out.println("아이디가 다릅니다");
+            }
+        }
     }
 }

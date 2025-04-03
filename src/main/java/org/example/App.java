@@ -13,21 +13,16 @@ public class App {
     public void run() {
         System.out.println("==프로그램 시작==");
         Scanner sc = new Scanner(System.in);
-
         while (true) {
             System.out.print("명령어 > ");
             String cmd = sc.nextLine().trim();
-
             Connection conn = null;
-
             try {
                 Class.forName("org.mariadb.jdbc.Driver");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
             String url = "jdbc:mariadb://127.0.0.1:3306/AM_DB_25_03?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
-
             try {
                 conn = DriverManager.getConnection(url, "root", "");
 
@@ -62,7 +57,10 @@ public class App {
         ArticleController articleController = new ArticleController(sc, conn, cmd);
         if (cmd.equals("member join")) {
             memberController.doJoin();
-
+        } else if (cmd.equals("member list")) {
+            memberController.showList();
+        } else if (cmd.equals("member login")) {
+            memberController.doLogin();
         } else if (cmd.equals("article write")) {
             articleController.doWrite();
         } else if (cmd.equals("article list")) {
@@ -73,9 +71,7 @@ public class App {
             articleController.showDetail();
         } else if (cmd.startsWith("article delete")) {
             articleController.doDelete();
-        }
-
-
+        }else System.out.println("사용할수 없는 명렁어 입니다.");
         return 0;
     }
 }
