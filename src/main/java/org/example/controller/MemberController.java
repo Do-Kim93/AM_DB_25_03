@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import static org.example.App.loginMember;
+
 public class MemberController {
     private Connection conn;
     private Scanner sc;
-    private Member loginMember = null;
 
     private MemberService memberService;
 
@@ -120,6 +121,7 @@ public class MemberController {
     public void doLogin() {
         if (loginMember != null) {
             System.out.println("이미 로그인 되어있슴");
+            return;
         }
         System.out.println("==로그인==");
         int i = 1;
@@ -157,6 +159,19 @@ public class MemberController {
                 System.out.println("로그아웃 완료");
             }
         }else System.out.println("로그인부터해");
+
+    }
+
+    public void showDetail(String cmd) {
+        System.out.println("==상세보기==");
+
+        if (loginMember==null) {
+            System.out.println("로그인 해");
+            return;
+        }else {
+            System.out.println(loginMember);
+        }
+
 
     }
 }

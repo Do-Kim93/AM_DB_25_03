@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.controller.ArticleController;
 import org.example.controller.MemberController;
+import org.example.dto.Member;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class App {
+    public static Member loginMember = null;
 
     public void run() {
         System.out.println("==프로그램 시작==");
@@ -54,7 +56,7 @@ public class App {
             return -1;
         }
         MemberController memberController = new MemberController(sc, conn);
-        ArticleController articleController = new ArticleController(sc, conn, cmd);
+        ArticleController articleController = new ArticleController(sc, conn);
         if (cmd.equals("member join")) {
             memberController.doJoin();
         } else if (cmd.equals("member list")) {
@@ -63,16 +65,18 @@ public class App {
             memberController.doLogin();
         } else if (cmd.equals("member logout")) {
             memberController.doLogout();
+        } else if (cmd.equals("member detail")) {
+            memberController.showDetail(cmd);
         } else if (cmd.equals("article write")) {
             articleController.doWrite();
         } else if (cmd.equals("article list")) {
             articleController.showList();
         } else if (cmd.startsWith("article modify")) {
-            articleController.doModify();
+            articleController.doModify(cmd);
         } else if (cmd.startsWith("article detail")) {
-            articleController.showDetail();
+            articleController.showDetail(cmd);
         } else if (cmd.startsWith("article delete")) {
-            articleController.doDelete();
+            articleController.doDelete(cmd);
         } else System.out.println("사용할수 없는 명렁어 입니다.");
         return 0;
     }

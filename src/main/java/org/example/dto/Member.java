@@ -18,6 +18,18 @@ public class Member {
         this.name = (String) memberMap.get("name");
     }
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", regDate='" + regDate + '\'' +
+                ", updateDate='" + updateDate + '\'' +
+                ", loginId='" + loginId + '\'' +
+                ", loginPw='" + loginPw + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }

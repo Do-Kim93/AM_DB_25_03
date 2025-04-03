@@ -4,24 +4,23 @@ import org.example.dto.Article;
 import org.example.service.ArticleService;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ArticleController {
-    Connection conn;
-    Scanner sc;
-    String cmd;
 
-    ArticleService articleService;
+    private Connection conn;
+    private Scanner sc;
 
-    public ArticleController(Scanner sc, Connection conn, String cmd) {
-        this.conn = conn;
+    private ArticleService articleService;
+
+    public ArticleController(Scanner sc, Connection conn) {
         this.sc = sc;
-        this.articleService = new ArticleService();
-        this.cmd = cmd;
+        this.conn = conn;
+        this.articleService = new ArticleService(conn);
     }
+
 
     public void doWrite() {
         System.out.println("==글쓰기==");
@@ -30,23 +29,15 @@ public class ArticleController {
         System.out.print("내용 : ");
         String body = sc.nextLine();
 
-
-        int id = articleService.doWrite(conn, title, body);
+        int id = articleService.doWrite(title, body);
 
         System.out.println(id + "번 글이 생성됨");
-
-
     }
 
     public void showList() {
         System.out.println("==목록==");
-        List<Article> articles = new ArrayList<>();
 
-        List<Map<String, Object>> articleListMap = articleService.showList(conn);
-
-        for (Map<String, Object> articleMap : articleListMap) {
-            articles.add(new Article(articleMap));
-        }
+        List<Article> articles = articleService.getArticles();
 
         if (articles.size() == 0) {
             System.out.println("게시글이 없습니다");
@@ -59,62 +50,87 @@ public class ArticleController {
         }
     }
 
-    public void doModify() {
+    public void doModify(String cmd) {
+
         int id = 0;
+
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {
             System.out.println("번호는 정수로 입력해");
             return;
         }
-        Map<String, Object> articleMap = articleService.foundId(conn, id);
+
+        Map<String, Object> articleMap = articleService.getArticleById(id);
+
         if (articleMap.isEmpty()) {
-            System.out.println(id + "번 글은 없음");
+            System.out.println(id + "번 글은 없어");
             return;
         }
+
         System.out.println("==수정==");
         System.out.print("새 제목 : ");
         String title = sc.nextLine().trim();
         System.out.print("새 내용 : ");
         String body = sc.nextLine().trim();
-        articleService.doModify(conn, id, title, body);
+
+        articleService.doUpdate(id, title, body);
+
         System.out.println(id + "번 글이 수정되었습니다.");
+
     }
-    public void showDetail() {
+
+    public void showDetail(String cmd) {
+
         int id = 0;
+
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {
             System.out.println("번호는 정수로 입력해");
             return;
         }
-        Map<String, Object> articleMap = articleService.showDetail(conn,id);
+
+        System.out.println("==상세보기==");
+
+        Map<String, Object> articleMap = articleService.getArticleById(id);
+
         if (articleMap.isEmpty()) {
-            System.out.println(id + "번 글은 없음");
+            System.out.println(id + "번 글은 없어");
             return;
         }
+
         Article article = new Article(articleMap);
+
         System.out.println("번호 : " + article.getId());
         System.out.println("작성날짜 : " + article.getRegDate());
         System.out.println("수정날짜 : " + article.getUpdateDate());
         System.out.println("제목 : " + article.getTitle());
         System.out.println("내용 : " + article.getBody());
     }
-    public void doDelete() {
+
+    public void doDelete(String cmd) {
+
         int id = 0;
+
         try {
             id = Integer.parseInt(cmd.split(" ")[2]);
         } catch (Exception e) {
             System.out.println("번호는 정수로 입력해");
             return;
         }
-        Map<String, Object> articleMap = articleService.doDeleteCheck(conn, id);
+
+        Map<String, Object> articleMap = articleService.getArticleById(id);
+
         if (articleMap.isEmpty()) {
-            System.out.println(id + "번 글은 없음");
+            System.out.println(id + "번 글은 없어");
             return;
         }
+
         System.out.println("==삭제==");
-        articleService.doDelete(conn, id);
+
+        articleService.doDelete(id);
+
         System.out.println(id + "번 글이 삭제되었습니다.");
     }
 }
